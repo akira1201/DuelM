@@ -1,0 +1,12 @@
+{
+  "scene": 1,
+  "minChoose": 3,
+  "maxChoose": 3,
+  "message": "タップするやつを選んでください。",
+  "cards": [
+      {"gameCardUId":301,"cardId":"card_front","isTapped":false},
+      {"gameCardUId":302,"cardId":"card_front","isTapped":false},
+      {"gameCardUId":303,"cardId":"card_front","isTapped":false},
+      {"gameCardUId":304,"cardId":"card_front","isTapped":false}
+  ]
+}
