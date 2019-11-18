@@ -1,7 +1,7 @@
 <template>
   <v-item-group class="py-0">
     <v-container class="py-0">
-      <v-layout column justify-center lign-center style="transform:rotate(180deg)">
+      <v-layout column justify-center align-center style="transform:rotate(180deg)">
         <v-row>
           <v-col
             v-for="item in this.$store.state.gameInfo.enemyZone.shieldCards"
@@ -148,7 +148,7 @@
 </template>
 
 <script>
-import card from './duel/card.vue'
+import card from '../atoms/card.vue'
 
 export default {
   components: {

@@ -19,7 +19,14 @@ export const state = () => ({
         commandY:0,
         gameCardUId:""
     },
-    dialogInfo: {},
+    dialogInfo: {
+        isShown:false,
+        scene: 0,
+        minChoose: 0,
+        maxChoose: 0,
+        message: "message",
+        cards: []
+    },
     loginInfo: null
   })
   

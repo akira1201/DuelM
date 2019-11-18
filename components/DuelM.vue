@@ -1,90 +1,42 @@
 <template>
   <v-app id="inspire" dark>
-    <v-toolbar app fixed clipped-left ref="duelToolbar">
-      <v-menu left>
-        <template v-slot:activator="{ on }">
-          <v-btn
-            icon
-            v-on="on"
-          >
-            <v-icon>more_vert</v-icon>
-          </v-btn>
-        </template>
-        <v-list>
-          <v-list-tile
-            @click="surrender"
-          >降参</v-list-tile>
-          <v-list-tile
-            @click="openDialog"
-          >ダイアログテスト</v-list-tile>
-          <confirmStanbyButton></confirmStanbyButton>
-        </v-list>
-      </v-menu>
-      <v-toolbar-title>DM</v-toolbar-title>
-      <v-toolbar-title>{{player}} - {{gamePhase}}</v-toolbar-title>
-      <singupButton></singupButton>
-      <singinButton></singinButton>
-      <newGameButton></newGameButton>
-      <mypageModal></mypageModal>
-      <defaultNewGameButton></defaultNewGameButton>
-    </v-toolbar>
-    <v-content class="py-0">
-      <v-container fluid fill-height @click.right.prevent="showCommand" @click="closeCommand">
-        <v-layout column justify-center align-center>
-          <detail ref="detail"/>
-        </v-layout>
-        <v-layout column justify-center align-center>
-          <duel
-            ref="duel"
-          />
-        </v-layout>
-      </v-container>
-    </v-content>
-    <duelDialog></duelDialog>
+    <duelToolbar/>
+    <v-container>
+      <v-row>
+        <v-col cols=4>
+          <detail/>
+        </v-col>
+        <v-col cols=8>
+          <duel/>
+        </v-col>
+      </v-row>
+    </v-container>
+    <duelDialog
+      :dialog="this.$store.state.dialogInfo.isShown"
+      :dialogInfo="this.$store.state.dialogInfo"
+    ></duelDialog>
     <command
       v-if="this.$store.state.commandInfo.isShown"
-      @show-command="showCommand"
     ></command>
-    <v-footer app fixed>
-    </v-footer>
   </v-app>
 </template>
 
 <script>
 import axios from 'axios'
-import detail from './game/detail.vue'
-import duel from './game/duel.vue'
-// import chatter from './game/chatter.vue'
-import duelDialog from './game/duel/duelDialog.vue'
-import command from './game/command.vue'
-import singupButton from './auth/singupButton.vue'
-import singinButton from './auth/singinButton.vue'
-import newGameButton from './manage/newGameButton.vue'
-import defaultNewGameButton from './manage/defaultNewGameButton.vue'
-import confirmStanbyButton from './manage/confirmStanbyButton.vue'
-import mypageModal from './auth/mypageModal.vue'
+import duelToolbar from './organisms/duelToolbar.vue'
+import detail from './organisms/detail.vue'
+import duel from './organisms/duel.vue'
+import duelDialog from './organisms/duelDialog.vue'
+import command from './molecules/command.vue'
 import env from '@/assets/env.json'
-import dialogInfo from '@/assets/dialogInfo.json'
 
 export default {
   components: {
+    duelToolbar,
     detail,
     duel,
-    // chatter,
     duelDialog,
     command,
-    singupButton,
-    singinButton,
-    mypageModal,
-    newGameButton,
-    confirmStanbyButton,
-    defaultNewGameButton
-  },
-  data: function () {
-    return {
-    }
-  },
-  mounted: async function () {
   },
   computed:{
     isLoggin(){

@@ -1,5 +1,10 @@
 <template>
 <v-dialog v-model="show" max-width="500px">
+  <template v-slot:activator="{ on }">
+    <v-btn v-on="on">
+      new game
+    </v-btn>
+  </template>
   <v-card>
     <v-card-actions>
       <input class="input" v-model="myId" placeholder="my id">
@@ -16,6 +21,7 @@
 <script>
 import axios from 'axios'
 import env from '@/assets/env.json'
+
 export default {
   props: {
      value: Boolean

@@ -14,8 +14,7 @@
         class="grey--text"
         height="100%"
         v-bind:src="cardImg"
-        >
-      </v-img>
+      />
     </v-card>
   </v-layout>
 </template>
@@ -29,8 +28,6 @@ function getCardImg(cardId){
   }
 }
 export default {
-  components: {
-  },
   props: [
     'cardId',
     'gameCardUId',

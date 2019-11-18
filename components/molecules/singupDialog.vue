@@ -1,7 +1,13 @@
 <template>
 <v-dialog v-model="show" max-width="500px">
+  <template v-slot:activator="{ on }">
+    <v-btn v-on="on">
+      signup
+    </v-btn>
+  </template>
   <v-card>
     <v-card-actions>
+      <input class="input" v-model="authName" placeholder="name">
       <input class="input" v-model="authMail" placeholder="mail">
       <input class="input" v-model="authPassword" placeholder="password">
       <v-btn color="primary" flat @click="callSingUp">Submit</v-btn>
@@ -13,7 +19,6 @@
 
 <script>
 import axios from 'axios'
-import env from '@/assets/env.json'
 export default {
   props: {
      value: Boolean
@@ -30,34 +35,19 @@ export default {
   },
   methods: {
     callSingUp(){
-      let requestData = {    
+      let headerData = {
+          "name": this.authName,
           "mail": this.authMail,
           "password": this.authPassword
       }
-      console.log(this.$parent)
       //console.log(headerData,headers)
       axios
-        .post(env.host+env.path.signin,requestData)
-        .then((response) => {
-          console.log(response)
-          localStorage.token = response.headers.token
-          let headers = {
-            "headers":{
-              "token": localStorage.token
-            }
-          }
-          axios
-            .post(env.host+env.path.getUser,{},headers)
-            .then((response) => {
-              console.log(response)
-              this.$root.$data.name = response.data.name
-              this.$root.$data.mail = response.data.mail
-            })
-        })
+        .post('/dev/auth/signup',headerData)
+        .then()
         .catch(function(error) {
           window.alert(error)
         });
-    }
+    },
   }
 }
 

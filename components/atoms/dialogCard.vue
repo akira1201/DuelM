@@ -12,14 +12,12 @@
           height="240px"
           width="180"
           :id="this.gameCardUId"
-          @click.left="chooseCard"
         >
           <v-img
             class="grey--text"
             height="100%"
             v-bind:src="cardImg"
-            >
-          </v-img>
+          />
         </v-card>
       </v-layout>
     </v-container>
@@ -41,10 +39,10 @@ export default {
     'cardId',
     'gameCardUId',
     'isTapped',
+    'isSelected',
   ],
   data: function () {
     return {
-      isSelected: false,
       cardImg: getCardImg(this.cardId),
     };
   },
@@ -59,11 +57,6 @@ export default {
       return {
         'transform': rotateDeg,
       };
-    },
-  },
-  methods: {
-    chooseCard(event){
-      this.$emit('chooseCard',event);
     },
   },
 }

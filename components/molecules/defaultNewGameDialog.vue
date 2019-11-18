@@ -1,5 +1,10 @@
 <template>
 <v-dialog v-model="show" max-width="500px">
+  <template v-slot:activator="{ on }">
+    <v-btn v-on="on">
+      default game
+    </v-btn>
+  </template>
   <v-card>
     <v-card-actions>
       <input class="input" v-model="enemyId" placeholder="enemy id">
