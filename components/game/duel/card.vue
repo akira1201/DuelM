@@ -1,29 +1,23 @@
 <template>
-  <v-content class="py-0">
-    <v-container class="py-1 px-2">
-      <v-layout
-        class="card"
-        :class="{ shown: isShown }"
-        :style="cardStyle"
-        justify-center
-        align-center
-      >
-        <v-card
-          height="120px"
-          width="90"
-          @click.left="showDetail"
-          @click.right.prevent="setCommandInfo"
+  <v-layout
+    class="card"
+    :class="{ shown: isShown }"
+    :style="cardStyle"
+  >
+    <v-card
+      height="120px"
+      width="90"
+      @click.prevent="setDetailInfo"
+      @click.right.prevent="setCommandInfo"
+    >
+      <v-img
+        class="grey--text"
+        height="100%"
+        v-bind:src="cardImg"
         >
-          <v-img
-            class="grey--text"
-            height="100%"
-            v-bind:src="cardImg"
-            >
-          </v-img>
-        </v-card>
-      </v-layout>
-    </v-container>
-  </v-content>
+      </v-img>
+    </v-card>
+  </v-layout>
 </template>
 
 <script>
@@ -43,11 +37,11 @@ export default {
     'zone',
     'isTapped',
     "canUse",
+    "isShown",
   ],
   data: function () {
     return {
       cardImg: getCardImg(this.cardId),
-      isShown: false,
     }
   },
   computed:{
@@ -65,43 +59,23 @@ export default {
     },
   },
   methods: {
-    showDetail(){
-      if(typeof this.cardId!==undefined){
-        this.$emit('showDetail', this);
-        this.isShown=true;
-      }
-    },
-    unshownDetail(){
-      this.isShown=false;
-    },
-    showCommand(){
-      this.$emit('show-command', this.commandInfo);
-    },
     setCommandInfo(){
-      if(typeof this.cardId!==undefined){
-        this.$emit('showDetail', this);
-        this.isShown=true;
+      this.$store.commit('updateCommandInfo', {
+        isShown:true,
+        canUse:this.canUse,
+        gameCardUId:this.gameCardUId
+      });
+    },
+    setDetailInfo(){
+      if(this.cardId){
+        this.$store.commit('updateDetailInfo', {
+          card_img:require('@/assets/cards/card_front.png')
+        });
+      }else{
+        this.$store.commit('updateDetailInfo', {
+          card_img:require('@/assets/cards/card_back.png')
+        });
       }
-
-      let commandCanUse
-      switch(this.zone){
-        case('myHand'):
-          if(this.canUse){
-            commandCanUse = true;
-          }
-          break;
-        case('myField'):
-          if(this.canUse){
-            commandCanUse = true;
-          }
-          break;
-      }
-      let commandInfo = {
-        "isCardSelected":true,
-        "canUse":commandCanUse,
-        "gameCardUId":this.gameCardUId
-      }
-      this.$emit('show-command',commandInfo);
     },
   },
 }
@@ -112,7 +86,7 @@ export default {
   border: solid 4px red;
 }
 .card:not(.shown){
-  padding: 4px;
+  margin:"4px";
   border: 0;
 }
 </style>

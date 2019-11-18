@@ -59,7 +59,7 @@ export default {
       await axios
         .get(env.host+env.path.getGameForPlayers.replace('{gameId}',this.$root.$data.gameId), headers)
         .then(response=>{
-          this.$emit('setGameInfo',response.data)
+          this.$store.commit('updateGameInfo', response.data);
         })
         .catch(function(error) {
           console.log(error)

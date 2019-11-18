@@ -24,13 +24,9 @@
       <v-toolbar-title>{{player}} - {{gamePhase}}</v-toolbar-title>
       <singupButton></singupButton>
       <singinButton></singinButton>
-      <newGameButton
-        @setGameInfo="setGameInfo"
-      ></newGameButton>
+      <newGameButton></newGameButton>
       <mypageModal></mypageModal>
-      <defaultNewGameButton
-        @setGameInfo="setGameInfo"
-      ></defaultNewGameButton>
+      <defaultNewGameButton></defaultNewGameButton>
     </v-toolbar>
     <v-content class="py-0">
       <v-container fluid fill-height @click.right.prevent="showCommand" @click="closeCommand">
@@ -40,29 +36,14 @@
         <v-layout column justify-center align-center>
           <duel
             ref="duel"
-            :myZone="gameInfo.myZone"
-            :enemyZone="gameInfo.enemyZone"
-            @showDetail="showDetail"
-            @show-command="showCommand"
           />
         </v-layout>
-        <!-- <v-layout column justify-center align-center> -->
-          <!-- <chatter/> -->
-        <!-- </v-layout> -->
       </v-container>
     </v-content>
-    <duelDialog
-      ref="duelDialog"
-    ></duelDialog>
+    <duelDialog></duelDialog>
     <command
-      v-if="commandInfo.isShown"
-      :style="commandStyle"
-      :step="gameInfo.step"
-      :canUse="commandInfo.canUse"
-      :gameCardUId="commandInfo.gameCardUId"
-      @close-command="closeCommand"
+      v-if="this.$store.state.commandInfo.isShown"
       @show-command="showCommand"
-      @setGameInfo="setGameInfo"
     ></command>
     <v-footer app fixed>
     </v-footer>
@@ -101,42 +82,27 @@ export default {
   },
   data: function () {
     return {
-      gameInfo:{
-        currentTurn:"",
-        step:1,
-        myZone:{},
-        enemyZone:{},
-      },
-      commandInfo:{
-        isShown:false,
-        canUse:false,
-        commandX:0,
-        commandY:0,
-        gameCardUId:""
-      },
-      dialogInfo: {},
-      loginInfo: this.$root.$data
     }
   },
   mounted: async function () {
   },
   computed:{
     isLoggin(){
-      if(this.loginInfo=='true'){
+      if(this.$store.state.loginInfo=='true'){
         return true
       } else {
         return false;
       }
     },
     player(){
-      if(this.gameInfo.currentTurn==localStorage.myId){
+      if(this.$store.state.gameInfo.currentTurn==localStorage.myId){
         return "Your Turn";
       } else {
         return "Enemy's Turn";
       }
     },
     gamePhase(){
-      switch(this.gameInfo.step){
+      switch(this.$store.state.gameInfo.step){
         case(1):
           return "Mana Charge Step";
         case(2):
@@ -147,46 +113,35 @@ export default {
           return "????";
       }
     },
-    commandStyle(){
-      return {
-        'z-index': 20,
-        'position': 'absolute',
-        'left': this.commandInfo.commandX+"px",
-        'top': this.commandInfo.commandY+"px",
-      }
-    },
   },
   methods: {
-    setGameInfo(gameInfo){
-      this.gameInfo=gameInfo
-    },
-    updateField(data){
-      this.$refs.duel.items=data
-    },
-    showDetail(card){
-      this.$refs.detail.showDetail(card)
-    },
     surrender(){
       window.alert("TODO impl 降参")
-    },
-    openDialog(event){
-      this.dialogInfo = dialogInfo;
-      this.$refs.duelDialog.showDialog(event,this.dialogInfo)
     },
     transition(){
       window.alert("TODO impl 次のステップリクエスト")
     },
     showCommand(event){
-      this.commandInfo.isShown=true;
-      this.commandInfo.commandX=event.pageX;
-      this.commandInfo.commandY=event.pageY
+      let canUse = false;
+      let gameCardUId = false;
       if(event.isCardSelected==true){
-        this.commandInfo.canUse=event.canUse;
-        this.commandInfo.gameCardUId=event.gameCardUId;
+        canUse = event.canUse;
+        gameCardUId=event.gameCardUId;
       }
+      this.$store.commit('updateDialogInfo', {
+        isShown:true,
+        canUse:canUse,
+        gameCardUId:gameCardUId
+      });
+
+    },
+    openDialog(event){
+      this.$store.commit('updateDialogInfo', dialogInfo);
     },
     closeCommand(){
-      this.commandInfo.isShown=false;
+      this.$store.commit('updateDialogInfo', {
+        isShown:false,
+      });
     },
   },
 }

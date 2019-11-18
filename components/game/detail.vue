@@ -7,14 +7,14 @@
             class="grey--text"
             height="500px"
             width="360px"
-            v-bind:src="card_img"
+            v-bind:src="this.$store.state.detailInfo.card_img"
           />
           <v-card-title>
             <div>
-              <span class="grey--text">{{name}}</span><br>
-              <span>コスト : {{cost}}</span><br>
-              <span>パワー : {{power}}</span><br><br>
-              <span style="white-space: pre-line">{{text}}</span>
+              <span class="grey--text">{{this.$store.state.detailInfo.name}}</span><br>
+              <span>コスト : {{this.$store.state.detailInfo.cost}}</span><br>
+              <span>パワー : {{this.$store.state.detailInfo.power}}</span><br><br>
+              <span style="white-space: pre-line">{{this.$store.state.detailInfo.text}}</span>
             </div>
           </v-card-title>
         </v-card>
@@ -25,15 +25,6 @@
 
 <script>
 export default {
-  data: function () {
-    return {
-      card_img:require('@/assets/cards/card_back.png'),
-      name:"",
-      cost:0,
-      power:0,
-      text:"",
-    }
-  },
   computed: {
     detailCardStyle(){
       return{
@@ -45,14 +36,5 @@ export default {
       }
     },
   },
-  methods: {
-    showDetail: function (card) {
-      this.card_img = require('@/assets/cards/card_front.png')
-      this.name = card.name
-      this.cost = card.cost
-      this.power = card.power
-      this.text = card.text
-    }
-  }
 }
 </script>
