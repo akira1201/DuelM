@@ -95,6 +95,37 @@ export default {
         isShown:false,
       });
     },
+    pollingGameInfo(intervalMilliSec){
+      const getGameInfo = cm =>{
+          let headers = {
+            "headers":{
+              "token": localStorage.token
+            }
+          }
+          if(cm.$root.$data.gameId){
+            axios
+						.get(env.host+env.path.getGameForPlayers.replace('{gameId}',cm.$root.$data.gameId), headers)
+						.then(response=>{
+							cm.$store.commit('updateGameInfo', response.data);
+						})
+						.catch(function(error) {
+							window.alert(error);
+						})
+          }
+      }
+      let cm = this
+      const id = setInterval(function() {
+        let d = new Date()
+        let h = d.getHours()
+        let m = d.getMinutes()
+        let s = d.getSeconds()
+        console.log(`Polling getGameInfo start at ${h}:${m}:${s}`)
+        getGameInfo(cm)
+      }, intervalMilliSec)
+    }
   },
+  created() {
+    this.pollingGameInfo(15000)
+  }
 }
 </script>
