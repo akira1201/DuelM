@@ -15,9 +15,6 @@
       :dialog="this.$store.state.dialogInfo.isShown"
       :dialogInfo="this.$store.state.dialogInfo"
     ></duelDialog>
-    <command
-      v-if="this.$store.state.commandInfo.isShown"
-    ></command>
   </v-app>
 </template>
 
@@ -27,7 +24,6 @@ import duelToolbar from './organisms/duelToolbar.vue'
 import detail from './organisms/detail.vue'
 import duel from './organisms/duel.vue'
 import duelDialog from './organisms/duelDialog.vue'
-import command from './molecules/command.vue'
 import env from '@/assets/env.json'
 
 export default {
@@ -36,7 +32,6 @@ export default {
     detail,
     duel,
     duelDialog,
-    command,
   },
   computed:{
     isLoggin(){
@@ -69,9 +64,6 @@ export default {
   methods: {
     surrender(){
       window.alert("TODO impl 降参")
-    },
-    transition(){
-      window.alert("TODO impl 次のステップリクエスト")
     },
     showCommand(event){
       let canUse = false;

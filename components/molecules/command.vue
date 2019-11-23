@@ -52,6 +52,9 @@ import axios from 'axios'
 import env from '@/assets/env.json'
 
 export default {
+  props: [
+    'commandInfo'
+  ],
   methods: {
     updateField(){
       let cm = this;
@@ -68,7 +71,6 @@ export default {
         .catch(function(error) {
           console.log(error);
         })
-        cm.$emit('close-command');
     },
 
     async nextStep(){
@@ -88,7 +90,6 @@ export default {
         .catch(error => {
           window.alert(error)
         })
-      cm.$emit('close-command');
     },
 
     async chargeMana(){
@@ -111,26 +112,45 @@ export default {
         .catch(error => {
           window.alert(error)
         })
-      cm.$emit('close-command');
     },
 
-    summon(){
-      window.alert("//TODO Implement POST for summonning");
-      this.$emit('close-command');
+    async summon(){
+      let cm = this;
+      let headers;
+      headers = {
+					"headers":{
+						"token": localStorage.token
+					}
+      }
+      let cardInfo;
+      await axios
+        .get(env.host+env.path.getCard.replace('{cardId}',cm.$store.state.commandInfo.cardId),headers)
+        .then(function(response){
+          cardInfo = response.data;
+        })
+        .catch(error => {
+          window.alert(error)
+        })
+      const dialogInfo = {
+          isShown:true,
+          scene: 1,
+          minChoose: cardInfo.mana_cost,
+          maxChoose: cardInfo.mana_cost,
+          message: "タップするカードを選んでください。",
+          actionCard: this.$store.state.commandInfo.gameCardUId
+      }
+      cm.$emit('openDialog',dialogInfo);
     },
 
     attack(){
       window.alert("//TODO Implement POST for attacking");
-      this.$emit('close-command');
     },
 
     useEffect(){
       window.alert("//TODO Implement POST for using effect");
-      this.$emit('close-command');
     },
 
     cancel(){
-      this.$emit('close-command');
     },
   },
 }
