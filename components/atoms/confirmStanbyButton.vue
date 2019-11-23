@@ -21,19 +21,18 @@ export default {
 						"token": localStorage.token
 					}
 			}
-			console.log(env.urls.deleteStandBy)
+			console.log(env.path.deleteStandByGame)
 			axios
-				.get(env.host+env.path.getStandByGame, headers)//axios.getの場合は 第二引数にheadersを詰めるらしい
+				.get(env.host+env.path.getStandByGame, headers)
 				.then(response=>{
 					standbyData = response.data
 					console.log(standbyData.standById)
 					this.$root.$data.gameId = standbyData.gameId
 					standbyId = standbyData.standById
 					console.log('standbyid is ' +  standbyId)
-					console.log(env.urls.deleteStandBy)
-					//Delete queue
+					console.log(env.path.deleteStandByGame)
 					axios
-						.delete(env.host+env.path.deleteStandByGame.replace('{standbyId}',standbyId),headers)//axios.deleteは getと同じく 第二引数にheadersを詰めるらしい
+						.delete(env.host+env.path.deleteStandByGame.replace('{standbyId}',standbyId),headers)
 						.then(response=>{
 							console.log(response)
 						})
@@ -41,11 +40,10 @@ export default {
 							window.alert(error);
 						})
 
-					//Fetch game data 
 					axios
-						.get(env.host+env.path.getGameForPlayers.replace('{gameId}',this.$root.$data.gameId), headers)//axios.getの場合は 第二引数にheadersを詰めるらしい
+						.get(env.host+env.path.getGameForPlayers.replace('{gameId}',this.$root.$data.gameId), headers)
 						.then(response=>{
-							window.alert('New game detect ' + this.$root.$data.gameId)
+							this.$store.commit('updateGameInfo', response.data);
 						})
 						.catch(function(error) {
 							window.alert(error);
