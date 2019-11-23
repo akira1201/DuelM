@@ -63,7 +63,7 @@ export default {
       axios
         .get((env.host+env.path.getGameForPlayers).replace('{gameId}',cm.$root.$data.gameId), headers)
         .then(function(response){
-          this.$store.commit('updateGameInfo', response.data);
+          cm.$store.commit('updateGameInfo', response.data);
         })
         .catch(function(error) {
           console.log(error);
@@ -94,7 +94,7 @@ export default {
     async chargeMana(){
       let cm = this;
       let requestData = {
-        "handCardUid": this.$store.state.commandInfo.gameCardUId
+        "handCardUid": cm.$store.state.commandInfo.gameCardUId
       }
       let headers = {
           "headers":{
