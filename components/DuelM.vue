@@ -97,8 +97,6 @@ export default {
     },
     pollingGameInfo(intervalMilliSec){
       const getGameInfo = cm =>{
-        console.log(cm)
-        console.log(`this.$root.$data.gameId is ${cm.$root.$data.gameId}`)
           let headers = {
             "headers":{
               "token": localStorage.token
@@ -117,12 +115,17 @@ export default {
       }
       let cm = this
       const id = setInterval(function() {
+        let d = new Date()
+        let h = d.getHours()
+        let m = d.getMinutes()
+        let s = d.getSeconds()
+        console.log(`Polling getGameInfo start at ${h}:${m}:${s}`)
         getGameInfo(cm)
       }, intervalMilliSec)
     }
   },
   created() {
-    this.pollingGameInfo(30000)
+    this.pollingGameInfo(15000)
   }
 }
 </script>
