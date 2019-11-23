@@ -17,14 +17,16 @@ export const state = () => ({
         canUse:false,
         commandX:0,
         commandY:0,
-        gameCardUId:""
+        gameCardUId:"",
+        cardId:""
     },
     dialogInfo: {
         isShown:false,
-        scene: 0,
+        scene: 0, //1:使用マナ選択, 2:攻撃対象クリーチャー選択
         minChoose: 0,
         maxChoose: 0,
         message: "message",
+        actionCard: "",
         cards: []
     },
     loginInfo: null
@@ -39,6 +41,17 @@ export const mutations = {
     },
     updateCommandInfo(state, commandInfo) {
         state.commandInfo = commandInfo;
+    },
+    resetDialogInfo(state){
+        state.dialogInfo = {
+            isShown:false,
+            scene: 0,
+            minChoose: 0,
+            maxChoose: 0,
+            message: "message",
+            actionCard: "",
+            cards: []
+        }
     },
     updateDialogInfo(state, dialogInfo) {
         state.dialogInfo = dialogInfo;

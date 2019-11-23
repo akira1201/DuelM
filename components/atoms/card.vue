@@ -57,10 +57,12 @@ export default {
   },
   methods: {
     setCommandInfo(){
+      this.setDetailInfo();
       this.$store.commit('updateCommandInfo', {
         isShown:true,
         canUse:this.canUse,
-        gameCardUId:this.gameCardUId
+        gameCardUId:this.gameCardUId,
+        cardId:this.cardId
       });
     },
     setDetailInfo(){

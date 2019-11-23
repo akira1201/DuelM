@@ -47,7 +47,9 @@
 </template>
 
 <script>
+import axios from 'axios'
 import dialogCards from '../atoms/dialogCard.vue'
+import env from '@/assets/env.json'
 
 export default {
   components:{
@@ -64,6 +66,7 @@ export default {
   },
   methods: {
     sendChoice(){
+      let cm = this;
       const choosenList = this.getChoosenList();
       if (choosenList.length < this.dialogInfo.minChoose){
         window.alert(this.dialogInfo.minChoose+"枚以上選んでね");
@@ -72,14 +75,33 @@ export default {
         window.alert(this.dialogInfo.minChoose+"枚以下で選んでね");
       }
       else {
-        this.dialog = false;
+        if(this.dialogInfo.scene){
+          let headers = {
+              "headers":{
+                "token": localStorage.token
+              }
+          }
+          let requestData = {
+              "handCardUid": this.dialogInfo.actionCard,
+              "manaCardUids": choosenList
+          }
+          axios
+            .post(env.host+env.path.postCreature.replace('{gameId}', this.$root.$data.gameId),requestData,headers)
+            .then(function(response){
+              cm.$store.commit('updateGameInfo', response.data);
+              cm.$store.commit('resetDialogInfo');
+            })
+            .catch(error => {
+              window.alert(error)
+            })
+        }
       }
     },
     getChoosenList(){
       let choosenList = [];
       this.$refs.dialogCard.forEach(c => {
         if(c.isSelected == true){
-          choosenList.push(c.cardId);
+          choosenList.push(c.gameCardUId);
         }
       })
       return choosenList;
